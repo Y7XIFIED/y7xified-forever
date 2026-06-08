@@ -1,10 +1,10 @@
-import AnimatedHero from "@/components/ui/animated-hero";
+import { PromptingIsAllYouNeed } from "@/components/ui/animated-hero-section";
 import Footer from "@/components/ui/animated-footer";
 
 const DemoOne = () => {
   return (
     <div className="flex flex-col w-full">
-      <AnimatedHero />
+      <PromptingIsAllYouNeed />
       <Footer
         leftLinks={[
           { href: "/terms", label: "Terms & policies" },
