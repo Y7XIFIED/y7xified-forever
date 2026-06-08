@@ -135,6 +135,27 @@ const PIXEL_MAP = {
     [1, 0, 0, 0],
     [1, 0, 0, 0],
   ],
+  V: [
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 1, 0, 0],
+  ],
+  "3": [
+    [1, 1, 1, 1],
+    [0, 0, 0, 1],
+    [0, 1, 1, 1],
+    [0, 0, 0, 1],
+    [1, 1, 1, 1],
+  ],
+  "<": [
+    [0, 0, 1],
+    [0, 1, 0],
+    [1, 0, 0],
+    [0, 1, 0],
+    [0, 0, 1],
+  ],
 }
 
 interface Pixel {
@@ -189,7 +210,7 @@ export function PromptingIsAllYouNeed() {
       const BALL_SPEED = 6 * scale
 
       pixelsRef.current = []
-      const words = ["Y7XIFIED", ""]
+      const words = ["Y7XIFIED", "FOREVER <3"]
 
       const calculateWordWidth = (word: string, pixelSize: number) => {
         return (
