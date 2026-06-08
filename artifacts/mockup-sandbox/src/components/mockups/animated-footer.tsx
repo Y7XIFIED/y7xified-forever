@@ -12,13 +12,13 @@ const DemoOne = () => {
         ]}
         rightLinks={[
           { href: "/careers", label: "Careers" },
-          { href: "/about", label: "About" },
+          { href: "/about", label: "About Y7XIFIED" },
           { href: "/help-center", label: "Help Center" },
-          { href: "https://x.com/taher_max_", label: "Twitter" },
-          { href: "https://www.instagram.com/taher_max_", label: "Instagram" },
-          { href: "https://github.com/tahermaxse", label: "GitHub" },
+          { href: "https://x.com/y7xified", label: "Twitter" },
+          { href: "https://www.instagram.com/y7xified", label: "Instagram" },
+          { href: "https://github.com/y7xified", label: "GitHub" },
         ]}
-        copyrightText="Cluely 2025. All Rights Reserved"
+        copyrightText="Y7XIFIED 2025. All Rights Reserved"
         barCount={23}
       />
     </div>
