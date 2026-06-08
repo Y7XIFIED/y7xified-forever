@@ -1,11 +1,10 @@
+import AnimatedHero from "@/components/ui/animated-hero";
 import Footer from "@/components/ui/animated-footer";
 
 const DemoOne = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex-1 bg-gray-100 flex items-center justify-center">
-        <p className="text-gray-400 text-sm">Scroll down to see the footer animate</p>
-      </div>
+    <div className="flex flex-col w-full">
+      <AnimatedHero />
       <Footer
         leftLinks={[
           { href: "/terms", label: "Terms & policies" },
