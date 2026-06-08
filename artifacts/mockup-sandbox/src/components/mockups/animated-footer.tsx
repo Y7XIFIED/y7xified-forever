@@ -11,14 +11,12 @@ const DemoOne = () => {
           { href: "/privacy-policy", label: "Privacy policy" },
         ]}
         rightLinks={[
-          { href: "/careers", label: "Careers" },
           { href: "/about", label: "About Y7XIFIED" },
-          { href: "/help-center", label: "Help Center" },
           { href: "https://x.com/y7xified", label: "Twitter" },
           { href: "https://www.instagram.com/y7xified", label: "Instagram" },
           { href: "https://github.com/y7xified", label: "GitHub" },
         ]}
-        copyrightText="Y7XIFIED 2025. All Rights Reserved"
+        copyrightText="Y7XIFIED 2025."
         barCount={23}
       />
     </div>

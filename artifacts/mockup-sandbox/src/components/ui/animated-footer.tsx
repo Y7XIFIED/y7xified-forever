@@ -118,14 +118,6 @@ const Footer: React.FC<FooterProps> = ({
               </li>
             ))}
           </ul>
-          <div className="text-right mt-4">
-            <button
-              onClick={handleBackToTop}
-              className="text-sm hover:underline inline-flex items-center gap-1 hover:text-sky-400 transition-colors"
-            >
-              Back to top
-            </button>
-          </div>
         </div>
       </div>
       <div
