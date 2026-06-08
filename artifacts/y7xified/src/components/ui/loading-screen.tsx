@@ -4,6 +4,8 @@ interface LoadingScreenProps {
   onDone: () => void
 }
 
+const DELAYS = [0.2, 0.4, 0.6, 1.0]
+
 const LoadingScreen = ({ onDone }: LoadingScreenProps) => {
   const [phase, setPhase] = useState<"in" | "hold" | "out" | "gone">("in")
 
@@ -25,7 +27,7 @@ const LoadingScreen = ({ onDone }: LoadingScreenProps) => {
   return (
     <div
       className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center gap-6"
-      style={{ opacity, transition: phase === "in" ? "opacity 0.4s ease" : "opacity 0.5s ease", letterSpacing }}
+      style={{ opacity, transition: phase === "in" ? "opacity 0.4s ease" : "opacity 0.5s ease" }}
     >
       <span
         className="text-white font-mono font-bold text-3xl"
@@ -34,12 +36,12 @@ const LoadingScreen = ({ onDone }: LoadingScreenProps) => {
         Y7XIFIED
       </span>
       <div className="flex gap-1">
-        {[0, 1, 2].map(i => (
+        {DELAYS.map((delay, i) => (
           <div
             key={i}
             className="w-1 h-1 bg-white rounded-full"
             style={{
-              animation: `pulse 1s ease-in-out ${i * 0.2}s infinite`,
+              animation: `pulse 1s ease-in-out ${delay}s infinite`,
               opacity: 0.5,
             }}
           />
