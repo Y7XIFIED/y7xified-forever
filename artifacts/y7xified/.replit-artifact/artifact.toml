@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Y7XIFIED"
+version = "1.0.0"
+id = "artifacts/y7xified"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24708
+
+[services.development]
+run = "pnpm --filter @workspace/y7xified run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/y7xified", "run", "build" ]
+publicDir = "artifacts/y7xified/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24708"
+BASE_PATH = "/"
