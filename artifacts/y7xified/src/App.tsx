@@ -1,6 +1,5 @@
 import AnimatedHeroSection from "@/components/ui/animated-hero-section";
 import AnimatedFooter from "@/components/ui/animated-footer";
-import NavBar from "@/components/ui/nav-bar";
 
 function App() {
   return (
@@ -12,7 +11,6 @@ function App() {
         scrollBehavior: "smooth",
       }}
     >
-      <NavBar />
 
       <div style={{ scrollSnapAlign: "start", height: "100vh" }}>
         <AnimatedHeroSection />

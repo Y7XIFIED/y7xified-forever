@@ -47,24 +47,29 @@ const AnimatedFooter = ({ barCount = 23 }: { barCount?: number }) => {
     <footer
       ref={footerRef}
       className="bg-black select-none overflow-hidden"
-      style={{ height: "50vh" }}
+      style={{ height: "50vh", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}
     >
-      <div style={{ height: "100%", display: "flex", alignItems: "flex-end" }}>
-        <div style={{ width: "100%", overflow: "hidden", height: 200 }}>
-          {Array.from({ length: barCount }).map((_, index) => (
-            <div
-              key={index}
-              ref={(el) => { waveRefs.current[index] = el; }}
-              style={{
-                height: `${index + 1}px`,
-                backgroundColor: "rgb(255, 255, 255)",
-                transition: "transform 0.1s ease",
-                willChange: "transform",
-                marginTop: "-2px",
-              }}
-            />
-          ))}
-        </div>
+      <div style={{ padding: "0 2rem 1.5rem" }}>
+        <p style={{ color: "#fff", fontFamily: "monospace", fontSize: "0.75rem", letterSpacing: "0.2em", lineHeight: "1.8", textTransform: "uppercase" }}>
+          Y7XIFIED<br />
+          2026. All rights reserved.
+        </p>
+      </div>
+
+      <div style={{ overflow: "hidden", height: 200 }}>
+        {Array.from({ length: barCount }).map((_, index) => (
+          <div
+            key={index}
+            ref={(el) => { waveRefs.current[index] = el; }}
+            style={{
+              height: `${index + 1}px`,
+              backgroundColor: "rgb(255, 255, 255)",
+              transition: "transform 0.1s ease",
+              willChange: "transform",
+              marginTop: "-2px",
+            }}
+          />
+        ))}
       </div>
     </footer>
   );
