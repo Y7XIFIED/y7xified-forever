@@ -66,7 +66,7 @@ const AnimatedFooter = ({ barCount = 23 }: { barCount?: number }) => {
             ref={(el) => { waveRefs.current[index] = el; }}
             style={{
               height: `${index + 1}px`,
-              backgroundColor: "rgb(130, 130, 130)",
+              backgroundColor: "rgb(255, 255, 255)",
               transition: "transform 0.1s ease",
               willChange: "transform",
               marginTop: "-2px",
