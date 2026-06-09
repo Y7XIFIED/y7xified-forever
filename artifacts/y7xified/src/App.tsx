@@ -1,13 +1,8 @@
-import { useState, useCallback } from "react";
 import AnimatedHeroSection from "@/components/ui/animated-hero-section";
 import AnimatedFooter from "@/components/ui/animated-footer";
 import NavBar from "@/components/ui/nav-bar";
-import LoadingScreen from "@/components/ui/loading-screen";
 
 function App() {
-  const [_loaded, setLoaded] = useState(false);
-  const handleDone = useCallback(() => setLoaded(true), []);
-
   return (
     <div
       style={{
@@ -17,7 +12,6 @@ function App() {
         scrollBehavior: "smooth",
       }}
     >
-      <LoadingScreen onDone={handleDone} />
       <NavBar />
 
       <div style={{ scrollSnapAlign: "start", height: "100vh" }}>
