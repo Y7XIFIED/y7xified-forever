@@ -1,6 +1,14 @@
 import AnimatedHeroSection from "@/components/ui/animated-hero-section";
 import AnimatedFooter from "@/components/ui/animated-footer";
 
+const monoStyle: React.CSSProperties = {
+  fontFamily: "monospace",
+  fontSize: "0.75rem",
+  letterSpacing: "0.2em",
+  textTransform: "uppercase",
+  color: "#fff",
+}
+
 function App() {
   return (
     <div
@@ -12,7 +20,24 @@ function App() {
       }}
     >
 
-      <div style={{ scrollSnapAlign: "start", height: "100vh" }}>
+      <div style={{ scrollSnapAlign: "start", height: "100vh", position: "relative" }}>
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 10,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "1.5rem 2rem",
+            pointerEvents: "none",
+          }}
+        >
+          <span style={monoStyle}>Y7XIFIED</span>
+          <span style={{ ...monoStyle, opacity: 0.4 }}>EST. 2025</span>
+        </div>
         <AnimatedHeroSection />
       </div>
 
