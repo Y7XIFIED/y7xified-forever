@@ -125,12 +125,30 @@ export function AnimatedHeroSection() {
   const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0 })
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
+  const audioCtxRef = useRef<AudioContext | null>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext("2d")
     if (!ctx) return
+
+    const playBeep = (freq: number) => {
+      try {
+        if (!audioCtxRef.current) audioCtxRef.current = new AudioContext()
+        const ac = audioCtxRef.current
+        const osc = ac.createOscillator()
+        const gain = ac.createGain()
+        osc.connect(gain)
+        gain.connect(ac.destination)
+        osc.type = "square"
+        osc.frequency.value = freq
+        gain.gain.setValueAtTime(0.08, ac.currentTime)
+        gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.06)
+        osc.start(ac.currentTime)
+        osc.stop(ac.currentTime + 0.06)
+      } catch { /* silent */ }
+    }
 
     const calculateWordWidth = (word: string, pixelSize: number) => {
       return (
@@ -141,11 +159,10 @@ export function AnimatedHeroSection() {
       )
     }
 
-    const initializeGame = () => {
+    const buildPixels = () => {
       const scale = scaleRef.current
       const LARGE_PIXEL_SIZE = 8 * scale
       const SMALL_PIXEL_SIZE = 4 * scale
-      const BALL_SPEED = 6 * scale
 
       pixelsRef.current = []
       const words = ["Y7XIFIED", "FOREVER <3"]
@@ -186,12 +203,7 @@ export function AnimatedHeroSection() {
               for (let row = 0; row < pixelMap.length; row++) {
                 for (let col = 0; col < pixelMap[row].length; col++) {
                   if (pixelMap[row][col]) {
-                    pixelsRef.current.push({
-                      x: startX + col * pixelSize,
-                      y: startY + row * pixelSize,
-                      size: pixelSize,
-                      hit: false,
-                    })
+                    pixelsRef.current.push({ x: startX + col * pixelSize, y: startY + row * pixelSize, size: pixelSize, hit: false })
                   }
                 }
               }
@@ -206,12 +218,7 @@ export function AnimatedHeroSection() {
             for (let row = 0; row < pixelMap.length; row++) {
               for (let col = 0; col < pixelMap[row].length; col++) {
                 if (pixelMap[row][col]) {
-                  pixelsRef.current.push({
-                    x: startX + col * pixelSize,
-                    y: startY + row * pixelSize,
-                    size: pixelSize,
-                    hit: false,
-                  })
+                  pixelsRef.current.push({ x: startX + col * pixelSize, y: startY + row * pixelSize, size: pixelSize, hit: false })
                 }
               }
             }
@@ -222,14 +229,22 @@ export function AnimatedHeroSection() {
         startY += wordIndex === 0 ? largeTextHeight + spaceBetweenLines : 0
       })
 
+      return { adjustedLargePixelSize }
+    }
+
+    const initializeGame = () => {
+      const scale = scaleRef.current
+      const BALL_SPEED = 5 * scale
+      const { adjustedLargePixelSize } = buildPixels()
+
       const paddleWidth = adjustedLargePixelSize
       const paddleLength = 6 * adjustedLargePixelSize
 
       ballRef.current = {
         x: canvas.width * 0.9,
         y: canvas.height * 0.1,
-        dx: -BALL_SPEED * scaleFactor,
-        dy: BALL_SPEED * scaleFactor,
+        dx: -BALL_SPEED,
+        dy: BALL_SPEED,
         radius: adjustedLargePixelSize / 2,
       }
 
@@ -254,11 +269,9 @@ export function AnimatedHeroSection() {
       ball.x += ball.dx
       ball.y += ball.dy
 
-      // Wall bounce
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) ball.dy = -ball.dy
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) ball.dx = -ball.dx
 
-      // Paddle collision
       paddlesRef.current.forEach((paddle) => {
         if (paddle.isVertical) {
           if (
@@ -281,7 +294,6 @@ export function AnimatedHeroSection() {
         }
       })
 
-      // Pixel collision
       pixelsRef.current.forEach((pixel) => {
         if (
           !pixel.hit &&
@@ -291,6 +303,7 @@ export function AnimatedHeroSection() {
           ball.y - ball.radius < pixel.y + pixel.size
         ) {
           pixel.hit = true
+          playBeep(180 + Math.random() * 500)
           const pixelCenterX = pixel.x + pixel.size / 2
           const pixelCenterY = pixel.y + pixel.size / 2
           if (Math.abs(ball.x - pixelCenterX) > Math.abs(ball.y - pixelCenterY)) {
@@ -301,7 +314,11 @@ export function AnimatedHeroSection() {
         }
       })
 
-      // Update paddles — track ball
+      // Loop: reset all pixels when every one has been hit
+      if (pixelsRef.current.length > 0 && pixelsRef.current.every((p) => p.hit)) {
+        pixelsRef.current.forEach((p) => { p.hit = false })
+      }
+
       paddlesRef.current.forEach((paddle) => {
         if (paddle.isVertical) {
           paddle.targetY = ball.y - paddle.height / 2
@@ -319,26 +336,30 @@ export function AnimatedHeroSection() {
       ctx.fillStyle = BACKGROUND_COLOR
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Pixels
       pixelsRef.current.forEach((pixel) => {
         ctx.fillStyle = pixel.hit ? HIT_COLOR : COLOR
         ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size)
       })
 
-      // Ball
       const ball = ballRef.current
       ctx.fillStyle = BALL_COLOR
       ctx.beginPath()
       ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
       ctx.fill()
 
-      // Paddles
       ctx.fillStyle = PADDLE_COLOR
       paddlesRef.current.forEach((p) => ctx.fillRect(p.x, p.y, p.width, p.height))
     }
 
     resizeCanvas()
     window.addEventListener("resize", resizeCanvas)
+
+    // Unlock AudioContext on first interaction
+    const unlock = () => {
+      try { audioCtxRef.current = new AudioContext() } catch { /* silent */ }
+    }
+    window.addEventListener("click", unlock, { once: true })
+    window.addEventListener("keydown", unlock, { once: true })
 
     let animFrameId: number
     const gameLoop = () => {
