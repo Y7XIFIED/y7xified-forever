@@ -50,7 +50,10 @@ const AnimatedFooter = ({ barCount = 23 }: { barCount?: number }) => {
       style={{ height: "50vh", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}
     >
       <div style={{ padding: "0 2rem 1.5rem" }}>
-        <p style={{ color: "#fff", fontFamily: "monospace", fontSize: "0.75rem", letterSpacing: "0.2em", lineHeight: "1.8", textTransform: "uppercase" }}>
+        <p
+          className={isVisible ? "anim-footer-text" : ""}
+          style={{ color: "#fff", fontFamily: "monospace", fontSize: "0.75rem", letterSpacing: "0.2em", lineHeight: "1.8", textTransform: "uppercase", opacity: isVisible ? undefined : 0 }}
+        >
           Y7XIFIED<br />
           2026. All rights reserved.
         </p>

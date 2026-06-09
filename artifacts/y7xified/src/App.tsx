@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import AnimatedHeroSection from "@/components/ui/animated-hero-section";
 import AnimatedFooter from "@/components/ui/animated-footer";
 
@@ -18,6 +18,8 @@ function App() {
   const containerRef = useRef<HTMLDivElement>(null);
   const currentSectionRef = useRef(0);
   const isAnimatingRef = useRef(false);
+  const flashRef = useRef<HTMLDivElement>(null);
+  const [flashKey, setFlashKey] = useState(0);
   const sections = 2;
 
   useEffect(() => {
@@ -30,6 +32,8 @@ function App() {
       if (clamped === currentSectionRef.current) return;
 
       isAnimatingRef.current = true;
+      setFlashKey(k => k + 1);
+
       const startY = container.scrollTop;
       const targetY = clamped * container.clientHeight;
       const distance = targetY - startY;
@@ -58,10 +62,8 @@ function App() {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       wheelAccum += e.deltaY;
-
       if (wheelTimeout) clearTimeout(wheelTimeout);
       wheelTimeout = setTimeout(() => { wheelAccum = 0; }, 200);
-
       if (Math.abs(wheelAccum) > 80) {
         const dir = wheelAccum > 0 ? 1 : -1;
         scrollToSection(currentSectionRef.current + dir);
@@ -76,25 +78,43 @@ function App() {
       if (Math.abs(delta) > 40) scrollToSection(currentSectionRef.current + (delta > 0 ? 1 : -1));
     };
 
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowDown") scrollToSection(currentSectionRef.current + 1);
+      if (e.key === "ArrowUp") scrollToSection(currentSectionRef.current - 1);
+    };
+
     container.addEventListener("wheel", onWheel, { passive: false });
     container.addEventListener("touchstart", onTouchStart, { passive: true });
     container.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("keydown", onKey);
 
     return () => {
       container.removeEventListener("wheel", onWheel);
       container.removeEventListener("touchstart", onTouchStart);
       container.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("keydown", onKey);
     };
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        height: "100vh",
-        overflowY: "hidden",
-      }}
-    >
+    <div ref={containerRef} style={{ height: "100vh", overflowY: "hidden", position: "relative" }}>
+
+      {/* Dark flash overlay during transitions */}
+      {flashKey > 0 && (
+        <div
+          key={flashKey}
+          ref={flashRef}
+          className="transition-flash"
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "#000",
+            zIndex: 100,
+            pointerEvents: "none",
+          }}
+        />
+      )}
+
       <div style={{ height: "100vh", position: "relative" }}>
         <div
           style={{
@@ -110,10 +130,12 @@ function App() {
             pointerEvents: "none",
           }}
         >
-          <span style={monoStyle}>Y7XIFIED</span>
-          <span style={{ ...monoStyle, opacity: 0.4 }}>EST. 07</span>
+          <span className="anim-header-left" style={monoStyle}>Y7XIFIED</span>
+          <span className="anim-header-right" style={{ ...monoStyle, opacity: 0.4 }}>EST. 07</span>
         </div>
-        <AnimatedHeroSection />
+        <div className="anim-canvas" style={{ width: "100%", height: "100%" }}>
+          <AnimatedHeroSection />
+        </div>
       </div>
 
       <div style={{ height: "50vh" }}>
