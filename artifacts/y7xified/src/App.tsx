@@ -35,7 +35,7 @@ function App() {
             pointerEvents: "none",
           }}
         >
-          <span style={monoStyle}>Y7XIFIED &lt;3</span>
+          <span style={monoStyle}>Y7XIFIED</span>
           <span style={{ ...monoStyle, opacity: 0.4 }}>EST. 07</span>
         </div>
         <AnimatedHeroSection />
