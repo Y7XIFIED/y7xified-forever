@@ -36,7 +36,7 @@ function App() {
           }}
         >
           <span style={monoStyle}>Y7XIFIED</span>
-          <span style={{ ...monoStyle, opacity: 0.4 }}>EST. 2025</span>
+          <span style={{ ...monoStyle, opacity: 0.4 }}>EST. 07</span>
         </div>
         <AnimatedHeroSection />
       </div>
