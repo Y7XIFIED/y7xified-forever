@@ -361,16 +361,36 @@ export function AnimatedHeroSection() {
     window.addEventListener("click", unlock, { once: true })
     window.addEventListener("keydown", unlock, { once: true })
 
+    let gameStarted = false
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.code === "Space") {
+        e.preventDefault()
+        gameStarted = true
+      }
+    }
+    window.addEventListener("keydown", handleKeydown)
+
     let animFrameId: number
     const gameLoop = () => {
-      updateGame()
+      if (gameStarted) {
+        updateGame()
+      }
       drawGame()
+      
+      if (!gameStarted) {
+        ctx.fillStyle = COLOR
+        ctx.font = `14px monospace`
+        ctx.textAlign = "center"
+        ctx.fillText("PRESS SPACE TO START", canvas.width / 2, canvas.height * 0.85)
+      }
+
       animFrameId = requestAnimationFrame(gameLoop)
     }
     gameLoop()
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
+      window.removeEventListener("keydown", handleKeydown)
       cancelAnimationFrame(animFrameId)
     }
   }, [])
